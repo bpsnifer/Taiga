@@ -1,0 +1,50 @@
+<? $this->includeTemplate('header') ?>
+
+<h2>Клиенты</h2>
+
+<div style="float: left">
+  <form>
+
+    <input type="hidden" name="m" value="clients">
+    <input type="hidden" name="a" value="<?=Actions::LIST?>">
+
+    <label for="phones">Телефон</label>
+    <input type="text" name="phones" id="phones" value="<?=$_GET['phones']?>">
+    <label for="second_name">Фамилия</label>
+    <input type="text" name="second_name" id="second_name" value="<?=$_GET['second_name']?>">
+
+    <input type="submit" value="Найти">
+  </form>
+</div>
+<div style="float: right; margin-right: 30px;">
+  <a href="?m=clients&a=<?=Actions::READ?>">Добавить</a>
+</div>
+
+<table width="100%">
+  <tr>
+    <td> Фамилия</td>
+    <td> Имя</td>
+    <td> Отчество</td>
+    <td> Дата рождения</td>
+    <td> Пол</td>
+    <td> Дата создания записи</td>
+    <td> Дата обновления записи</td>
+    <td> Телефоны клиента</td>
+    <td></td>
+  </tr>
+  <? foreach($clients as $client): ?>
+  <tr>
+    <td> <?=$client['second_name']?> </td>
+    <td> <?=$client['name']?> </td>
+    <td> <?=$client['middle_name']?> </td>
+    <td> <?=$client['birthday']?> </td>
+    <td> <?=$client['gender']?'Мужской':'Женский'?> </td>
+    <td> <?=$client['date_create']?> </td>
+    <td> <?=$client['date_update']?> </td>
+    <td> <?=$client['phones']?> </td>
+    <td><a href="?m=clients&a=<?=Actions::READ?>&id=<?=$client['id']?>">Редактировать</a></td>
+  </tr>
+  <? endforeach; ?>
+</table>
+
+<? $this->includeTemplate('footer') ?>

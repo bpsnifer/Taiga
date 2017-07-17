@@ -1,0 +1,109 @@
+<? $this->includeTemplate('header') ?>
+
+<a href="?m=clients">К списку клиентов</a>
+
+<? if ($client): ?>
+<h2>Редактирование клиента</h2>
+<? else : ?>
+<h2>Добавление клиента</h2>
+<? endif; ?>
+
+<form method="post" enctype="multipart/form-data" action="?m=clients&a=<?=$client ? Actions::UPDATE : Actions::CREATE?>&id=<?=$client['id']?>">
+  <table>
+    <tr>
+      <td><label for="second_name">Фамилия</label></td>
+      <td><input type="text" name="second_name" id="second_name" value="<?=$client['second_name']?>"></td>
+    </tr>
+
+    <tr>
+      <td><label for="name">Имя</label></td>
+      <td><input type="text" name="name" id="name" value="<?=$client['name']?>"></td>
+    </tr>
+
+    <tr>
+      <td><label for="middle_name">Отчество</label></td>
+      <td><input type="text" name="middle_name" id="middle_name" value="<?=$client['middle_name']?>"></td>
+    </tr>
+
+    <tr>
+      <td><label for="birthday">Дата рождения</label></td>
+      <td><input type="date" name="birthday" id="birthday" value="<?=$client['birthday']?>"></td>
+    </tr>
+
+    <tr>
+      <td><label>Пол</label></td>
+      <td>
+
+        <select name="gender">
+          <option value="1"
+          <?=$client['gender']?'selected':''?>>Мужской</option>
+          <option value="0"
+          <?=!$client['gender']?'selected':''?>>Женский</option>
+        </select>
+
+      </td>
+    </tr>
+
+  </table>
+
+  <input type="submit" value="Сохранить">
+</form>
+
+<form method="post" enctype="multipart/form-data" action="?m=clients&a=<?=Actions::DELETE?>&id=<?=$client['id']?>" onclick="return confirm('Вы действительно хотите удалить клиента?')">
+  <input type="submit" value="Удалить">
+</form>
+
+<? if ($client): ?>
+<h3>Телефоны</h3>
+
+<script language="JavaScript">
+  var phoneAction = function (formName, phone) {
+    var form = document.getElementById(formName);
+    form.elements['phone'].value = phone;
+    form.submit();
+  };
+
+  var editPhone = function (phoneId, phone) {
+    phoneAction('phone_edit_' + phoneId, phone);
+  };
+
+  var addPhone = function (phone) {
+    phoneAction('phone_add', phone);
+  };
+</script>
+
+<form method="post" enctype="multipart/form-data" action="?m=phones&a=<?=Actions::CREATE?>" id="phone_add">
+  <input type="hidden" name="client_id" value="<?=$client['id']?>">
+  <input type="hidden" name="phone" value="<?=$phone['phone']?>">
+
+  <input type="button" value="Добавить" onclick="addPhone(prompt('Введите номер телефона', ''))">
+</form>
+
+<table>
+  <? foreach($phones as $phone): ?>
+  <tr>
+    <td>
+      <?=$phone['phone']?>
+    </td>
+    <td>
+      <form method="post" enctype="multipart/form-data" action="?m=phones&a=<?=Actions::UPDATE?>&id=<?=$phone['id']?>" id="phone_edit_<?=$phone['id']?>">
+        <input type="hidden" name="client_id" value="<?=$client['id']?>">
+        <input type="hidden" name="phone" value="<?=$phone['phone']?>">
+
+        <input type="button" value="Изменить" onclick="editPhone(<?=$phone['id']?>, prompt('Введите номер телефона', '<?=$phone['phone']?>'))">
+      </form>
+    </td>
+    <td>
+      <form method="post" enctype="multipart/form-data" action="?m=phones&a=<?=Actions::DELETE?>&id=<?=$phone['id']?>" onclick="return confirm('Вы действительно хотите удалить телефон <?=$phone['phone']?>?')">
+        <input type="hidden" name="client_id" value="<?=$client['id']?>">
+
+        <input type="submit" value="Удалить">
+      </form>
+    </td>
+  </tr>
+  <? endforeach; ?>
+</table>
+
+<? endif; ?>
+
+<? $this->includeTemplate('footer') ?>
