@@ -12,7 +12,7 @@ Class App
    */
   public function __construct()
   {
-    $this->db = new Database('root', 'codemaster', 'taiga');
+    $this->db = new Database('root', '', 'taiga');
     $this->router = new Router();
 
     $params = [
